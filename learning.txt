@@ -1,0 +1,39 @@
+******************************************
+****** Stay hungry, Stay foolish ********* 
+******************************************
+
+1. Linux fonts path: /usr/share/fonts/
+By default the font is Monospace, another good font is consola
+
+2.Install EPEL for centOS 7:
+yum search epel
+yum install epel-release
+
+EPEL official website:
+http://fedoraproject.org/wiki/EPEL/zh-cn
+
+3. Install Synergy:
+yum search synergy
+yum install synergy
+
+Synergy github path, version 1.8.6:
+https://github.com/symless/synergy.git
+
+4. sudo settings:
+1) root account run command visudo to edit /etc/sudoers
+2) uncomment the line: #%wheel ALL=(ALL) NOPASSWD:ALL
+
+5. Config my github account, push my local files into github.
+1) ssh-keygen -t rsa -C "sdtimothy8@gmail.com" 
+2) compress enter always, then it will generate ssh key under path ~/.ssh/id_rsa.pub
+3) copy the key and add it into your github account.
+4) For testing: ssh -T git@github.com
+5) git config --global user.name "sdtimothy8"
+6) git config --global user.email "sdtimothy8@gmail.com"
+7) Clone the remote repository to your local:
+git clone git@github.com:sdtimothy8/repositoryName
+
+8) make some change and push your changes
+git push origin master
+
+6. Install KVM
