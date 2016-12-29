@@ -37,3 +37,18 @@ git clone git@github.com:sdtimothy8/repositoryName
 git push origin master
 
 6. Install KVM
+    6.1) Virtualization Technology
+    1) Check BIOS setting, make sure the CPU's Virtualization Technology
+       is set to Enabled.
+    2) Check whether your processors support VT.
+       #grep -E 'vmx|svm' /proc/cpuinfo
+       //vmx is for intel and svm is for AMD.
+
+    6.2) Install required packages 
+    1) #yum install qemu-kvm libvirt libvirt-python libguestfs-tools virt-install
+    2) #systemctl enable libvirtd && systemctl start libvirtd
+    3) #lsmod | grep kvm
+    Note: Better install the packages one by one
+
+    6.3) Change the network setting
+
