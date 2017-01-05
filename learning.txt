@@ -36,7 +36,34 @@ git clone git@github.com:sdtimothy8/repositoryName
 8) make some change and push your changes
 git push origin master
 
-6. Install KVM
+6. Install the every thing ISO and make it as local repo:
+mount the ISO
+#mount /opt/xxx.iso /mnt/iso
+add a new repo file like dvd.repo into path /etc/yum.repo.d/
+add below content into the new file.
+=======================
+[local]
+name=local
+baseurl=file:///mnt/iso
+gpgcheck=0
+=======================
+We can disable the base, updates and extras repo.
+yum-config-manager --disable base updates extras
+
+yum clean all
+yum makecache
+
+8. set auto mount for the iso.
+open the file of /etc/fstab
+add below content:
+===================
+/dev/loop0  /mnt/iso        iso9660    defaults        0 2
+===================
+0: whether need backup use demp command, 0 means noneed
+2: whether need use fsck dect partation.
+NOTE: This setting has problem, it will cause system setup hang.
+
+8. Install KVM
     6.1) Virtualization Technology
     1) Check BIOS setting, make sure the CPU's Virtualization Technology
        is set to Enabled.
@@ -45,10 +72,63 @@ git push origin master
        //vmx is for intel and svm is for AMD.
 
     6.2) Install required packages 
-    1) #yum install qemu-kvm libvirt libvirt-python libguestfs-tools virt-install
+    1) #yum install qemu-kvm qemu-img
+    2) Install some useful tools: 
+       #yum install virt-manager libvirt 
     2) #systemctl enable libvirtd && systemctl start libvirtd
     3) #lsmod | grep kvm
     Note: Better install the packages one by one
 
-    6.3) Change the network setting
+    6.3) Create VMs using KVM
+
+    6.4) Change the network setting
+
+9. Install the YouCompleteMe plugin for vim by Vundle
+1) add below content into .vimrc:
+Plugin 'sdtimothy8/YouCompleteMe'
+2) open vim and input :PluginIntall
+3) Recomplile the YouCompleteMe
+#yum install automake gcc gcc-c++ kernel-devel cmake
+#yum install python-devel
+#cd ~/.vim/bundle/YouCompleteMe
+#./install.py --clang-completer
+4) add the config file into the project path
+
+10. Some useful GUI diff tools:
+1) meld         //support dir, need gtk+ 3.4.2
+2) diffmerge    //support dir
+3) diffuse
+4) kompare
+
+11. Install the Pomodairo.
+
+12. Install the Chinese input method
+Application -> System tools -> Setting -> Regin & Language
++ Chinese
+Select Chinese(Intelligent Pinyin)
+
+13. Install shadowsocks, report below error:
+=====================================
+Traceback (most recent call last):
+  File "/usr/bin/ssserver", line 11, in <module>
+      sys.exit(main())
+        File "/usr/lib/python2.7/site-packages/shadowsocks/server.py", line 68, in main
+            tcp_servers.append(tcprelay.TCPRelay(a_config, dns_resolver, False))
+              File "/usr/lib/python2.7/site-packages/shadowsocks/tcprelay.py", line 582, in __init__
+                  server_socket.bind(sa)
+                    File "/usr/lib64/python2.7/socket.py", line 224, in meth
+                        return getattr(self._sock,name)(*args)
+                        socket.error: [Errno 99] Cannot assign requested address
+                        ====================================
+
+
+***************************************************
+********* Sed Learning ****************************
+***************************************************
+1. -n suppress the default output
+sed -n '/north/p' test.txt
+// Print the patterns contain north in test.txt
+
+2.
+
 
