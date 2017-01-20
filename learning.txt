@@ -121,6 +121,9 @@ Traceback (most recent call last):
                         socket.error: [Errno 99] Cannot assign requested address
                         ====================================
 
+14. Mount the shared dir of Windows for Linux:
+1) create new dir on Linux: /mnt/share
+2) mount -t cifs -o username=ligm,password=xxxx //10.72.125.139/share /mnt/share
 
 ***************************************************
 ********* Sed Learning ****************************
@@ -129,6 +132,128 @@ Traceback (most recent call last):
 sed -n '/north/p' test.txt
 // Print the patterns contain north in test.txt
 
-2.
+2. Issue of end of line anchor:
+1) If the file is copied from the Windows the end of line maybe '^M$'
+2) In Unix/Linux, the end of line char is '$'
+To change the Windows format to unix, use below command:
+vim fileName; :set fileformat=unix
+
+
+***************************************************
+********* Bash Learning ****************************
+***************************************************
+1. Command input in Shell are executed in below order:
+1) Alias 2) Keywords( if while for ... ) 3) Functions
+4) Built-in commands 5) Executables and scripts
+
+2. Use type command to identify the command type.
+
+3. Commmand group, seperated by semicolon:
+   like: ls;pwd;date
+   The result of command group can be redirected, like:
+   ( ls;pwd;date ) > tmp
+
+4. Command shopt: shell option
+   -o ( set -o )
+   -p ( print )
+   -s (set)
+   -u (unset)
+
+5. Job control: bg fg jobs ctrl+z
+jobs -l
+jobs -r
+jobs -s
+
+6. When input command, press two Tabs can show all the matched ones. 
+
+7. Define a global variable in bash use:
+   export variable=value or  declare -x variable=value
+
+8. Use command 'unset' to remove a variable from the shell memory.
+   unset variable
+   Use 'set --' to unset all positional parameters.
+
+9. echo command:
+   -e: 可以使用转义字符。like, echo "\n Hello world!\n"
+   -n: Suppresses newline at the end of a line of output
+
+10. The difference between Single quotes and Double quotes in bash. 
+    Single quotes protect all metacharacters from interpretation.
+    Double quotes will allow variable and command substitution.
+
+11. Two ways for command substitution:
+    1) old format, use backquotes: `date`
+    2) new format, use $(): $(date)
+
+12. Standard I/O and redirection.
+    stdin:  0 
+    stdout: 1
+    stderr: 2 ------------------------------- < fileName      Redirects input > fileName      Redirects output >> fileName     Appends output 2> fileName     Redirects error 2>> fileName    Appends error
+    >& fileName     Redirects output and error  
+    2>&1            Redirects error to where output is going 
+    1>&2            Redirects output to where error is going 
+
+13. Special Variables:
+    $: The PID of the shell.
+    ?: The exit status of last executed command.
+    !: The PID of the last job put in the background.
+
+14. Source one file causes all settings in the file 
+    to become part of the current shell, not create a sub shell.
+
+15. System setup process:
+    1) Run init process, whose PID is 1.
+    2) Run getty process, to show the login prompt.
+    3) Run login process, to verify passwd and set up initial environments.
+    4) Run bash process.
+
+16. Difference between shell metacharacters and regular expression metacharacters.
+    1) Shell metacharacters are evaluated by the UNIX/Linux shell. For example, rm *
+       the asterisk is a shell metacharacter, called a wildcard, and is evaluated by
+       the shell to mean "Match on all filenames in the current working directory."
+
+    2) Regular expression metacharacters are evaluated by the programs that perform
+       pattern matching, such as vi, grep, sed and awk.
+
+****************************************************************
+***************** 目录管理 *************************************
+****************************************************************
+1. more, less, tail, head
+2. Dump the file in ASCII format:
+   od -t oCc fileName
+   Use od command to open the binary format file.
+3. command touch 
+    1) Create a new file
+    2) Change the file's time attribute, mtime, ctime, etc
+    touch -a -c -t -d -m
+
+4. File's three time attribute:
+   1) mtime: (modification time) The last time when the file's content is modified.
+   2) ctime: (status time) The last time when the file attribute is changed.
+   3) atime: (access time) The last time when the file is accessed.
+5. locate/updatedb
+   Before run command locate, we'd better exe command updatedb.
+
+6. Compress file:
+   1) *.Z       File compressed by software compress
+   2) *.zip     File compressed by software zip
+   3) *.gz      File compressed by software gzip
+   4) *.bz2     File compressed by software bzip2
+   5) *.xz      File compressed by software xz
+   6) *.tar     用tar打包但是没有压缩。
+
+7. Note the difference between /dev/null and /dev/zero
+   dd if=/dev/zero  of=test.txt bs=1M count=10
+   cat test.txt >& /dev/null&
+   
+   /dev/null is used to create dummy file or swap.
+
+
+
+
+
+
+
+
 
 
