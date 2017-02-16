@@ -123,7 +123,38 @@ Traceback (most recent call last):
 
 14. Mount the shared dir of Windows for Linux:
 1) create new dir on Linux: /mnt/share
-2) mount -t cifs -o username=ligm,password=xxxx //10.72.125.139/share /mnt/share
+2) mount -t cifs -o username=ligm,password=xxxx //10.72.125.239/share /mnt/share
+
+15. Set the solarized them for vim
+1) Install the plugin dircolors-solarized by Vundle
+2) link the them file $them_path/dircolors.256dark /root/.dir_colors
+3) Install the plugin gnome-terminal-colors-solarized by Vundle
+4) cd xxx/Vundle/gnome-terminal-colors-solarized
+5) ./set_dark.sh
+
+16. Patch usage:
+1) Apply the patch: 
+$ patch -pN < patchfile
+Note: The number 'N' indicate the number of removed '/' from the path.
+2) Remove the patch:
+$ patch -R < patchfile
+3) After apply the patch, remember to make clean and make again.
+
+17. yum groupinstall Development Tools
+
+18. Create the md5 value for files:
+$ md5sum fileName
+others are sha1sum or sha256sum
+
+19. Load the .so file into cache to improve performance
+1) Add new file /etc/ld.so.conf.d/xxx.conf
+2) add the related lib dir into the .conf file.
+3) Run command of ldconfig
+4) Use command ldconfig -p to verify.
+
+20. ldd to list the .so files this program depending on.
+$ ldd /usr/bin/passwd
+2) ldd -v /lib64/libc.so.6
 
 ***************************************************
 ********* Sed Learning ****************************
@@ -137,6 +168,8 @@ sed -n '/north/p' test.txt
 2) In Unix/Linux, the end of line char is '$'
 To change the Windows format to unix, use below command:
 vim fileName; :set fileformat=unix
+another solution: use two commands
+unix2dos or dos2unix
 
 
 ***************************************************
@@ -242,18 +275,36 @@ jobs -s
    5) *.xz      File compressed by software xz
    6) *.tar     用tar打包但是没有压缩。
 
+6.1 gzip 
+
+   gzip -v fileName      // Compress file use gzip
+   By default, the compressed fie name is fileName.gz
+
+   gzip -d fileName.gz   // Decompress the file 
+   gzip -c fileName  > fileName.gz // The original file will be kept.
+   Can use -N: N means 1-9 to idicate the compress level.
+
+   Can use zgre/zless/zcat to operate the compressed fie.
+
+6.2 bzip2: 
+    The usage is similar to gzip, the default name is *.bz2
+    -k: keep the original file.
+
+6.3 xz:
+6.4 tar: 
+    tar [-z|-j|-J] [cv] [-f] newCompressedFileName file1 file2 ...
+    tar [-z|-j|-J] [tv] [-f] current tar file // List all files in the tar file
+    tar [-z|-j|-J] [xv] [-f] decompress the tar file 
+    tar -C: // Specify the decompressed dir
+    tar -p: // When compress keep the file's original permission
+    tar --exclude=files: // exclude some files from compress
+
+
 7. Note the difference between /dev/null and /dev/zero
    dd if=/dev/zero  of=test.txt bs=1M count=10
    cat test.txt >& /dev/null&
    
    /dev/null is used to create dummy file or swap.
 
-
-
-
-
-
-
-
-
-
+8. Linux time spec:
+   man /usr/share/doc/at/timespec
