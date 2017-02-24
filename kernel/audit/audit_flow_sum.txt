@@ -1,0 +1,80 @@
+///////Main data structrue:
+1. int audit_open()
+return a fd the file type is netlink socket.
+The netlink socket is used for IPC.
+
+2. 
+struct audit_message {
+	struct nlmsghdr nlh;
+	char   data[MAX_AUDIT_MESSAGE_LENGTH];
+};
+           struct nlmsghdr {
+               __u32 nlmsg_len;    /* Length of message including header. */
+               __u16 nlmsg_type;   /* Type of message content. */
+               __u16 nlmsg_flags;  /* Additional flags. */
+               __u32 nlmsg_seq;    /* Sequence number. */
+               __u32 nlmsg_pid;    /* Sender port ID. */
+           };
+
+ struct nlmsgerr {
+               int error;        /* Negative errno or 0 for acknowledgements */
+               struct nlmsghdr msg;  /* Message header that caused the error */
+           };
+
+           struct sockaddr_nl {
+               sa_family_t     nl_family;  /* AF_NETLINK */
+               unsigned short  nl_pad;     /* Zero. */
+               pid_t           nl_pid;     /* Port ID. */
+               __u32           nl_groups;  /* Multicast groups mask. */
+           };
+
+
+///////Main interfaces:
+
+1. int audit_open()
+2. int audit_close();
+3. int audit_send(int fd, int flags, void*, int size)
+
+### set rules for the filesystem 
+
+4. int audit_add_watch_dir(int type, struct audit_rule_data **rulep, const char* path)
+5. int audit_setup_perms(struct audit_rule_data *rule, const char *opt)
+6. int audit_rule_fieldpair_data(struct audit_rule_data **rulep, const char *pair, int flags)
+
+#### set rules for systemcall
+
+7. int audit_rule_syscall_data(struct audit_rule_data *rule, int scall)
+-- rule->mask[word] |= bit;
+
+#### audit event start and stop
+1. int send_audit_event(int type, const char *str)
+2. static void distribute_event(struct auditd_reply_list *rep)
+|
+int dispatch_event(const struct audit_reply *rep, int is_err)
+|
+writev()
+
+3. int audit_get_reply(int fd, struct audit_reply *rep, reply_t block, int peek)
+|
+recvfrom() // recieve the message from the socket.
+
+////////Auditctl 
+1. auditctl -l // to list the audit rules
+int audit_request_rule_list(int fd)
+|
+int audit_request_rules_list_data(int fd)
+    |
+    audit_send(fd, AUDIT_LIST_RULES, NULL, 0)
+    |
+    sendto(fd, ...) // send a message to a socket
+
+get_reply()
+    |
+    select()
+    |
+    int audit_get_reply(int fd, struct audit_reply *rep, reply_t block, int peek)
+        |
+        recvfrom() // receive a message from the socket
+
+    int audit_print_reply(struct audit_reply *rep, int fd)
+

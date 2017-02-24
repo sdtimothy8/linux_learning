@@ -1,0 +1,90 @@
+
+Main struct:
+
+1. cmd_t --> struct cmd_obj*
+
+struct cmd_obj {
+	cmd_tag_t		c_cmd;
+	acl_type_t		c_type; // Default and Access type
+	acl_tag_t		c_tag;  // 
+	uid_t			c_id;   // user id or group id
+	mode_t			c_perm;
+	struct cmd_obj		*c_next;
+};
+
+acl_type_t:
+#define ACL_TYPE_ACCESS		(0x8000)
+#define ACL_TYPE_DEFAULT	(0x4000)
+
+acl_tag_t:
+#define ACL_UNDEFINED_TAG	(0x00)
+#define ACL_USER_OBJ		(0x01)
+#define ACL_USER		(0x02)
+#define ACL_GROUP_OBJ		(0x04)
+#define ACL_GROUP		(0x08)
+#define ACL_MASK		(0x10)
+#define ACL_OTHER		(0x20)
+
+acl_perm_t:
+#define ACL_READ		(0x04)
+#define ACL_WRITE		(0x02)
+#define ACL_EXECUTE		(0x01)
+
+2. seq_t --> struct seq_obj*
+
+struct seq_obj {
+	cmd_t			s_first;
+	cmd_t			s_last;
+};
+
+3. acl_t --> struct __acl_ext
+
+struct __acl_ext {
+	acl_entry_obj		*a_prev, *a_next;
+	acl_entry_obj		*a_curr;
+	acl_entry_obj		*a_prealloc, *a_prealloc_end;
+	size_t			a_used;
+};
+
+acl_entry_obj --> struct acl_entry_obj_tag
+
+struct acl_entry_obj_tag {
+	obj_prefix              o_prefix;
+	struct __acl_entry_ext	i;
+};
+
+struct __acl_entry {
+	acl_tag_t		e_tag;
+	qualifier_obj		e_id;
+	acl_permset_obj		e_perm;
+};
+
+struct __acl_entry_ext {
+	acl_entry_obj		*e_prev, *e_next;
+	acl_obj			*e_container;
+	struct __acl_entry	e_entry;
+};
+
+struct acl_entry_obj_tag {
+	obj_prefix              o_prefix;
+	struct __acl_entry_ext	i;
+};
+Main Flow:
+parse_acl_seq()
+|
+parse_acl_md()
+
+// The main options set in setfacl command is saved in the data struct seq_t seq
+
+next_file()
+|
+walk_tree(, funtcion pointer,  )
+|
+walk_tree_rec()
+
+do_set();
+|
+setxattr();
+
+do_print();
+

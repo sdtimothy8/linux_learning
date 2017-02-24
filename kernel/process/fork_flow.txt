@@ -1,0 +1,11 @@
+//////Main flow
+
+1. system call fork()
+|
+do_fork()
+|
+copy_process()
+|
+dup_task_struct()
+
+// Copy-on-write technic
